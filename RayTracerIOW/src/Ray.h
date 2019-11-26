@@ -8,7 +8,7 @@ public:
 	Vector3 dir;
 
 	Ray() {}
-	Ray(const Vector3& a, const Vector3& b) { orig = a; dir = b; }
+	Ray(const Vector3& a, const Vector3& b) : orig(a), dir(b) {};
 
 	Vector3 origin() const { return orig; }
 	Vector3 direction() const { return dir; }

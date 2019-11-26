@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-float hit_sphere(const Vector3& center, float radius, const Ray& r)
+float hitSphere(const Vector3& center, float radius, const Ray& r)
 {
 	Vector3 oc = r.origin() - center;
 	float a= r.direction().dot2();
@@ -19,7 +19,7 @@ float hit_sphere(const Vector3& center, float radius, const Ray& r)
 
 Vector3 color(const Ray& r)
 {
-	float t = hit_sphere(Vector3(0, 0, -1), 0.5, r);
+	float t = hitSphere(Vector3(0, 0, -1), 0.5, r);
 	if (t > 0.f) {
 		Vector3 N = (r.pointAtParam(t) - Vector3(0, 0, -1)).normalized();
 		return 0.5f * Vector3(N.x() + 1.f, N.y() + 1.f, N.z() + 1.f);
