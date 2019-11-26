@@ -108,11 +108,13 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\HittableList.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Hittable.h" />
+    <ClInclude Include="src\HittableList.h" />
     <ClInclude Include="src\Ray.h" />
     <ClInclude Include="src\Sphere.h" />
     <ClInclude Include="src\Vector3.h" />
