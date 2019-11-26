@@ -4,14 +4,14 @@
 class Ray
 {
 public:
-	Vector3 A;
-	Vector3 B;
+	Vector3 orig;
+	Vector3 dir;
 
 	Ray() {}
-	Ray(const Vector3& a, const Vector3& b) { A = a; B = b; }
+	Ray(const Vector3& a, const Vector3& b) { orig = a; dir = b; }
 
-	Vector3 origin() const { return A; }
-	Vector3 direction() const { return B; }
+	Vector3 origin() const { return orig; }
+	Vector3 direction() const { return dir; }
 	Vector3 pointAtParam(float t) const { return origin() + t * direction(); }
 };
 

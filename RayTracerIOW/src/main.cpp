@@ -13,12 +13,13 @@ Vector3 color(const Ray& r)
 
 int main() 
 {
-	std::ofstream file;
-	file.open("outputs/output.ppm");
-
 	int
 		nX = 400,
 		nY = 400;
+
+	std::ofstream file;
+	file.open("outputs/output.ppm");
+
 	file << "P3\n" << nX << " " << nY << "\n255\n";
 	Vector3 lower_left_corner(-2.0, -1.0, -1.0);
 	Vector3 horizontal(4.0, 0.0, 0.0);

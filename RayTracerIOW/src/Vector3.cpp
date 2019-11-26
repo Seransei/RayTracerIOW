@@ -56,6 +56,11 @@ inline void Vector3::normalize()
 	values[2] *= k;
 }
 
+Vector3 Vector3::normalized() const
+{
+	return Vector3(values[0] / magnitude(), values[1] / magnitude(), values[2] / magnitude());
+}
+
 inline Vector3 Vector3::cross(const Vector3& v)
 {
 	return Vector3(values[1] * v.values[2] - values[2] * v.values[1],
