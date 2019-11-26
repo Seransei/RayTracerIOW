@@ -4,10 +4,28 @@
 #include <iostream>
 #include <fstream>
 
+float hit_sphere(const Vector3& center, float radius, const Ray& r)
+{
+	Vector3 oc = r.origin() - center;
+	float a= r.direction().dot2();
+	float b = 2.0f * oc.dot(r.direction());
+	float c = oc.dot2() - radius * radius;
+	float theta = b * b - 4 * a * c;
+	if (theta < 0)
+		return -1.0;
+	else
+		return (-b - sqrt(theta)) / (2.f * a);
+}
+
 Vector3 color(const Ray& r)
 {
+	float t = hit_sphere(Vector3(0, 0, -1), 0.5, r);
+	if (t > 0.f) {
+		Vector3 N = (r.pointAtParam(t) - Vector3(0, 0, -1)).normalized();
+		return 0.5f * Vector3(N.x() + 1.f, N.y() + 1.f, N.z() + 1.f);
+	}
 	Vector3 unitDir = r.direction().normalized();
-	float t = 0.5f * (unitDir.y() + 1.0f);
+	t = 0.5f * (unitDir.y() + 1.0f);
 	return (1.0f - t) * Vector3(1.0f, 1.0f, 1.0f) + t * Vector3(0.5f, 0.7f, 1.0f);
 }
 
