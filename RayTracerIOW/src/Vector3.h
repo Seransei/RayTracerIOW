@@ -28,12 +28,12 @@ public:
 	inline float& operator[](int i) { return values[i]; }
 
 	// Math operations on Vector3
-	inline Vector3& operator+=(const Vector3& v);
-	inline Vector3& operator-=(const Vector3& v);
-	inline Vector3& operator*=(const Vector3& v);
-	inline Vector3& operator/=(const Vector3& v);
-	inline Vector3& operator*=(const float t);
-	inline Vector3& operator/=(const float t);
+	Vector3& operator+=(const Vector3& v);
+	Vector3& operator-=(const Vector3& v);
+	Vector3& operator*=(const Vector3& v);
+	Vector3& operator/=(const Vector3& v);
+	Vector3& operator*=(const float t);
+	Vector3& operator/=(const float t);
 
 	inline float magnitude() const { return sqrt(values[0] * values[0] + values[1] * values[1] + values[2] * values[2]); }
 	inline float squared_magnitude() const { return values[0] * values[0] + values[1] * values[1] + values[2] * values[2]; }

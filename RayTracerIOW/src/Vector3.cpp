@@ -1,6 +1,6 @@
 #include "Vector3.h"
 
-inline Vector3& Vector3::operator+=(const Vector3& v)
+Vector3& Vector3::operator+=(const Vector3& v)
 {
 	values[0] += v.values[0];
 	values[1] += v.values[1];
@@ -8,7 +8,7 @@ inline Vector3& Vector3::operator+=(const Vector3& v)
 	return *this;
 }
 
-inline Vector3& Vector3::operator-=(const Vector3& v)
+Vector3& Vector3::operator-=(const Vector3& v)
 {
 	values[0] -= v.values[0];
 	values[1] -= v.values[1];
@@ -16,7 +16,7 @@ inline Vector3& Vector3::operator-=(const Vector3& v)
 	return *this;
 }
 
-inline Vector3& Vector3::operator*=(const Vector3& v)
+Vector3& Vector3::operator*=(const Vector3& v)
 {
 	values[0] *= v.values[0];
 	values[1] *= v.values[1];
@@ -24,7 +24,7 @@ inline Vector3& Vector3::operator*=(const Vector3& v)
 	return *this;
 }
 
-inline Vector3& Vector3::operator/=(const Vector3& v)
+Vector3& Vector3::operator/=(const Vector3& v)
 {
 	values[0] /= v.values[0];
 	values[1] /= v.values[1];
@@ -32,7 +32,7 @@ inline Vector3& Vector3::operator/=(const Vector3& v)
 	return *this;
 }
 
-inline Vector3& Vector3::operator*=(const float t)
+Vector3& Vector3::operator*=(const float t)
 {
 	values[0] *= t;
 	values[1] *= t;
@@ -40,7 +40,7 @@ inline Vector3& Vector3::operator*=(const float t)
 	return *this;
 }
 
-inline Vector3& Vector3::operator/=(const float t)
+Vector3& Vector3::operator/=(const float t)
 {
 	values[0] /= t;
 	values[1] /= t;

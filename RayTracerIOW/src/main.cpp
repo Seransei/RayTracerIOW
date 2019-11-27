@@ -1,5 +1,7 @@
 #include "HittableList.h"
 #include "Sphere.h"
+#include "Camera.h"
+#include "Random.h"
 
 #include <iostream>
 #include <fstream>
@@ -23,37 +25,37 @@ int main()
 {
 	int
 		nX = 400,
-		nY = 400;
+		nY = 400,
+		nS = 100;
 
 	std::ofstream file;
 	file.open("outputs/output.ppm");
-
-	file << "P3\n" << nX << " " << nY << "\n255\n";
-	Vector3 lower_left_corner(-2.0, -1.0, -1.0);
-	Vector3 horizontal(4.0, 0.0, 0.0);
-	Vector3 vertical(0.0, 4.0, 0.0);
-	Vector3 origin(0.0, 0.0, 0.0);
 
 	Hittable* list[2];
 	list[0] = new Sphere(Vector3(0.f, 0.f, -1.f), 0.5);
 	list[1] = new Sphere(Vector3(0.f, -100.5f, -1.f), 100);
 	Hittable* world = new HittableList(list, 2);
 
+	Camera cam;
+	file << "P3\n" << nX << " " << nY << "\n255\n";
+
 	for (int y = nY - 1; y >= 0; y--) 
 	{
 		for (int x = 0; x < nX; x++) 
 		{
-			float u = float(x) / float(nX);
-			float v = float(y) / float(nY);
-			Ray r(origin, lower_left_corner + u * horizontal + v * vertical);
-
-			Vector3 p = r.pointAtParam(2.f);
-			Vector3 pix = color(r, world);
+			Vector3 pixCol(0, 0, 0);
+			for (int s = 0; s < nS; s++) {
+				float u = float(x + randomDouble()) / float(nX);
+				float v = float(y + randomDouble()) / float(nY);
+				Ray r = cam.getRay(u, v);
+				pixCol += color(r, world);
+			}
+			pixCol /= float(nS);
 
 			int
-				ir = int(255.99 * pix[0]),
-				ig = int(255.99 * pix[1]),
-				ib = int(255.99 * pix[2]);
+				ir = int(255.99 * pixCol[0]),
+				ig = int(255.99 * pixCol[1]),
+				ib = int(255.99 * pixCol[2]);
 			file << ir << " " << ig << " " << ib << "\n";
 		}
 	}
