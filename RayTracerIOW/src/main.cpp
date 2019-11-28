@@ -10,9 +10,10 @@
 Vector3 color(const Ray& r, Hittable *world)
 {
 	HitRecord hrec;
-	if (world->hit(r, 0.f, FLT_MAX, hrec))
+	if (world->hit(r, 0.001f, FLT_MAX, hrec))
 	{
-		return 0.5f * Vector3(hrec.normal.x() + 1.f, hrec.normal.y() + 1.f, hrec.normal.z() + 1.f);
+		Vector3 target = hrec.point + hrec.normal + randomInUnitSphere();
+		return 0.5f* color(Ray(hrec.point, target - hrec.point), world);
 	} else
 	{
 		Vector3 unitDir = r.direction().normalized();
@@ -43,19 +44,19 @@ int main()
 	{
 		for (int x = 0; x < nX; x++) 
 		{
-			Vector3 pixCol(0, 0, 0);
+			Vector3 col(0, 0, 0);
 			for (int s = 0; s < nS; s++) {
 				float u = float(x + randomDouble()) / float(nX);
 				float v = float(y + randomDouble()) / float(nY);
 				Ray r = cam.getRay(u, v);
-				pixCol += color(r, world);
+				col += color(r, world);
 			}
-			pixCol /= float(nS);
-
+			col /= float(nS);
+			col = Vector3(sqrt(col[0]), sqrt(col[1]), sqrt(col[2]));
 			int
-				ir = int(255.99 * pixCol[0]),
-				ig = int(255.99 * pixCol[1]),
-				ib = int(255.99 * pixCol[2]);
+				ir = int(255.99 * col[0]),
+				ig = int(255.99 * col[1]),
+				ib = int(255.99 * col[2]);
 			file << ir << " " << ig << " " << ib << "\n";
 		}
 	}
