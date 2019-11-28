@@ -2,18 +2,27 @@
 #include "Sphere.h"
 #include "Camera.h"
 #include "Random.h"
+#include "Metal.h"
+#include "Lambertian.h"
 
 #include <iostream>
 #include <fstream>
 #include <float.h>
 
-Vector3 color(const Ray& r, Hittable *world)
+Vector3 color(const Ray& r, Hittable *world, int depth)
 {
 	HitRecord hrec;
 	if (world->hit(r, 0.001f, FLT_MAX, hrec))
 	{
-		Vector3 target = hrec.point + hrec.normal + randomInUnitSphere();
-		return 0.5f* color(Ray(hrec.point, target - hrec.point), world);
+		Ray scattered;
+		Vector3 attenuation;
+		if (depth < 5/*maxDepth*/ && hrec.mat->scatter(r, hrec, attenuation, scattered)) 
+		{
+			return attenuation * color(scattered, world, depth + 1);
+		} else
+		{
+			return Vector3(0, 0, 0);
+		}
 	} else
 	{
 		Vector3 unitDir = r.direction().normalized();
@@ -32,10 +41,12 @@ int main()
 	std::ofstream file;
 	file.open("outputs/output.ppm");
 
-	Hittable* list[2];
-	list[0] = new Sphere(Vector3(0.f, 0.f, -1.f), 0.5);
-	list[1] = new Sphere(Vector3(0.f, -100.5f, -1.f), 100);
-	Hittable* world = new HittableList(list, 2);
+	Hittable* list[4];
+	list[0] = new Sphere(Vector3(0.f, 0.f, -1.f), 0.5f, new Lambertian(Vector3(0.8f, 0.3f, 0.3f)));
+	list[1] = new Sphere(Vector3(0.f, -100.5f, -1.f), 100.f, new Lambertian(Vector3(0.8f, 0.8f, 0.f)));
+	list[2] = new Sphere(Vector3(1.f, 0.f, -1.f), 0.5f, new Metal(Vector3(0.8f, 0.6f, 0.2f), 0.3f));
+	list[3] = new Sphere(Vector3(-1.f, 0.f, -1.f), 0.5f, new Metal(Vector3(0.8f, 0.8f, 0.8f), 1.0f));
+	Hittable* world = new HittableList(list, 4);
 
 	Camera cam;
 	file << "P3\n" << nX << " " << nY << "\n255\n";
@@ -49,7 +60,7 @@ int main()
 				float u = float(x + randomDouble()) / float(nX);
 				float v = float(y + randomDouble()) / float(nY);
 				Ray r = cam.getRay(u, v);
-				col += color(r, world);
+				col += color(r, world, 0);
 			}
 			col /= float(nS);
 			col = Vector3(sqrt(col[0]), sqrt(col[1]), sqrt(col[2]));

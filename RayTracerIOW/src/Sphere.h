@@ -5,9 +5,10 @@ class Sphere : public Hittable {
 public:
 	Vector3 center;
 	float radius;
+	Material* mat;
 
 	Sphere() {}
-	Sphere(Vector3 cen, float r) : center(cen), radius(r) {};
+	Sphere(Vector3 cen, float r, Material* m) : center(cen), radius(r), mat(m) {};
 	virtual bool hit(const Ray& r, float tmin, float tmax, HitRecord& hrec) const;
 };
 
@@ -23,6 +24,7 @@ bool Sphere::hit(const Ray& r, float t_min, float t_max, HitRecord& hrec) const 
 			hrec.t = temp;
 			hrec.point = r.pointAtParam(hrec.t);
 			hrec.normal = (hrec.point - center) / radius;
+			hrec.mat = mat;
 			return true;
 		}
 		temp = (-b + sqrt(discriminant)) / a;
@@ -30,6 +32,7 @@ bool Sphere::hit(const Ray& r, float t_min, float t_max, HitRecord& hrec) const 
 			hrec.t = temp;
 			hrec.point = r.pointAtParam(hrec.t);
 			hrec.normal = (hrec.point - center) / radius;
+			hrec.mat = mat;
 			return true;
 		}
 	}

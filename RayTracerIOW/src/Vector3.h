@@ -87,3 +87,8 @@ inline Vector3 operator/(const Vector3& v, float t) {
 inline Vector3 operator/(float t, const Vector3& v) {
 	return Vector3(t / v.values[0], t / v.values[1], t / v.values[2]);
 }
+
+inline Vector3 reflect(const Vector3& v, const Vector3& n)
+{
+	return v - 2 * v.dot(n) * n;
+}
