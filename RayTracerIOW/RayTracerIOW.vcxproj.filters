@@ -63,5 +63,11 @@
     <ClInclude Include="src\Metal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\AABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BVHNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

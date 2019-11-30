@@ -9,7 +9,9 @@ public:
 
 	Sphere() {}
 	Sphere(Vector3 cen, float r, Material* m) : center(cen), radius(r), mat(m) {};
+
 	virtual bool hit(const Ray& r, float tmin, float tmax, HitRecord& hrec) const;
+	virtual bool boundingBox(float t0, float t1, AABB& box) const;
 };
 
 bool Sphere::hit(const Ray& r, float t_min, float t_max, HitRecord& hrec) const {
@@ -37,4 +39,10 @@ bool Sphere::hit(const Ray& r, float t_min, float t_max, HitRecord& hrec) const 
 		}
 	}
 	return false;
+}
+
+bool Sphere::boundingBox(float t0, float t1, AABB& box) const
+{
+	box = AABB(center - Vector3(radius, radius, radius), center + Vector3(radius, radius, radius));
+	return true;
 }
