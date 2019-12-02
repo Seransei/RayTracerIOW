@@ -8,7 +8,7 @@ public:
 	Material* mat;
 
 	Sphere() {}
-	Sphere(Vector3 cen, float r, Material* m) : center(cen), radius(r), mat(m) {};
+	Sphere(Vector3 cen, float r, Material* m) { center = cen; radius = r; mat = m; };
 
 	virtual bool hit(const Ray& r, float tmin, float tmax, HitRecord& hrec) const;
 	virtual bool boundingBox(float t0, float t1, AABB& box) const;

@@ -9,11 +9,8 @@ public:
 	Vector3 min;
 	Vector3 max;
 
-	AABB();
+	AABB() {}
 	AABB(const Vector3& a, const Vector3& b) { min = a; max = b; }
-	
-	Vector3 min() const { return min; }
-	Vector3 max() const { return max; }
 
 	inline bool hit(const Ray& r, float tmin, float tmax) const 
 	{

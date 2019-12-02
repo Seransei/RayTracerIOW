@@ -31,6 +31,42 @@ Vector3 color(const Ray& r, Hittable *world, int depth)
 	}
 }
 
+Hittable* randomScene()
+{
+	const int nSph = 500;
+	Hittable** list = new Hittable * [nSph + 1];
+	list[0] = new Sphere(Vector3(0.f, -1000.f, 0.f), 1000, new Lambertian(Vector3(0.5f, 0.5f, 0.5f)));
+
+	int i = 0;
+	for (int a = -11; a < 11; a++) 
+	{
+		for (int b = -11; b < 11; b++) 
+		{
+			float choose_mat = randomDouble();
+			Vector3 center(a + 0.9f * randomDouble(), 0.2f, b + 0.9f * randomDouble());
+			if ((center - Vector3(4, 0.2, 0)).magnitude() > 0.9) {
+				if (choose_mat < 0.8) {  // diffuse
+					list[i++] = new Sphere(center, 0.2,
+						new Lambertian(Vector3(randomDouble() * randomDouble(),
+							randomDouble() * randomDouble(),
+							randomDouble() * randomDouble())
+						)
+					);
+				}
+				else { // metal
+					list[i++] = new Sphere(center, 0.2,
+						new Metal(Vector3(0.5 * (1 + randomDouble()),
+							0.5 * (1 + randomDouble()),
+							0.5 * (1 + randomDouble())),
+							0.5 * randomDouble()));
+				}
+			}
+		}
+	}
+
+	return new HittableList(list, i);
+}
+
 int main() 
 {
 	int
@@ -41,12 +77,7 @@ int main()
 	std::ofstream file;
 	file.open("outputs/output.ppm");
 
-	Hittable* list[4];
-	list[0] = new Sphere(Vector3(0.f, 0.f, -1.f), 0.5f, new Lambertian(Vector3(0.8f, 0.3f, 0.3f)));
-	list[1] = new Sphere(Vector3(0.f, -100.5f, -1.f), 100.f, new Lambertian(Vector3(0.8f, 0.8f, 0.f)));
-	list[2] = new Sphere(Vector3(1.f, 0.f, -1.f), 0.5f, new Metal(Vector3(0.8f, 0.6f, 0.2f), 0.3f));
-	list[3] = new Sphere(Vector3(-1.f, 0.f, -1.f), 0.5f, new Metal(Vector3(0.8f, 0.8f, 0.8f), 1.0f));
-	Hittable* world = new HittableList(list, 4);
+	Hittable* world = randomScene();
 
 	Camera cam;
 	file << "P3\n" << nX << " " << nY << "\n255\n";

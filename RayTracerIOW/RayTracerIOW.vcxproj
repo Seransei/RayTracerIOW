@@ -112,7 +112,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\HittableList.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
   </ItemGroup>

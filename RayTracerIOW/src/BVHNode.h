@@ -2,17 +2,6 @@
 #include "Hittable.h"
 #include "Random.h"
 
-AABB surroundingBox(AABB box0, AABB box1)
-{
-	Vector3 small(ffmin(box0.min().x(), box1.min().x()),
-		ffmin(box0.min().y(), box1.min().y()),
-		ffmin(box0.min().z(), box1.min().z()));
-	Vector3 big(ffmax(box0.max().x(), box1.max().x()),
-		ffmax(box0.max().y(), box1.max().y()),
-		ffmax(box0.max().z(), box1.max().z()));
-	return AABB(small, big);
-}
-
 int box_x_compare(const void* a, const void* b) {
 	AABB boxLeft, boxRight;
 	Hittable* ah = *(Hittable**)a;
@@ -21,7 +10,7 @@ int box_x_compare(const void* a, const void* b) {
 	if (!ah->boundingBox(0, 0, boxLeft) || !bh->boundingBox(0, 0, boxRight))
 		std::cerr << "no bounding box in BVHNode constructor\n";
 
-	if (boxLeft.min().x() - boxRight.min().x() < 0.0f)
+	if (boxLeft.min.x() - boxRight.min.x() < 0.0f)
 		return -1;
 	else
 		return 1;
@@ -35,7 +24,7 @@ int box_y_compare(const void* a, const void* b) {
 	if (!ah->boundingBox(0, 0, boxLeft) || !bh->boundingBox(0, 0, boxRight))
 		std::cerr << "no bounding box in BVHNode constructor\n";
 
-	if (boxLeft.min().y() - boxRight.min().y() < 0.0f)
+	if (boxLeft.min.y() - boxRight.min.y() < 0.0f)
 		return -1;
 	else
 		return 1;
@@ -49,7 +38,7 @@ int box_z_compare(const void* a, const void* b) {
 	if (!ah->boundingBox(0, 0, boxLeft) || !bh->boundingBox(0, 0, boxRight))
 		std::cerr << "no bounding box in BVHNode constructor\n";
 
-	if (boxLeft.min().z() - boxRight.min().z() < 0.0f)
+	if (boxLeft.min.z() - boxRight.min.z() < 0.0f)
 		return -1;
 	else
 		return 1;
