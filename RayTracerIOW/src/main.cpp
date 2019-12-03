@@ -34,7 +34,7 @@ Vector3 color(const Ray& r, Hittable *world, int depth)
 Hittable* randomScene()
 {
 	const int nSph = 500;
-	Hittable** list = new Hittable * [nSph + 1];
+	Hittable** list = new Hittable* [nSph + 1];
 	list[0] = new Sphere(Vector3(0.f, -1000.f, 0.f), 1000, new Lambertian(Vector3(0.5f, 0.5f, 0.5f)));
 
 	int i = 0;
