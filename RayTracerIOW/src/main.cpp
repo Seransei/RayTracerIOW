@@ -31,38 +31,42 @@ Vector3 color(const Ray& r, Hittable *world, int depth)
 	}
 }
 
-Hittable* randomScene()
-{
-	const int nSph = 500;
-	Hittable** list = new Hittable* [nSph + 1];
-	list[0] = new Sphere(Vector3(0.f, -1000.f, 0.f), 1000, new Lambertian(Vector3(0.5f, 0.5f, 0.5f)));
-
+Hittable* randomScene() {
+	const int n = 10;
+	Hittable** list = new Hittable * [n + 1];
 	int i = 0;
-	for (int a = -11; a < 11; a++) 
-	{
-		for (int b = -11; b < 11; b++) 
-		{
+	for (int a = -10; a < 10; a++) {
+		for (int b = -10; b < 10; b++) {
 			float choose_mat = randomDouble();
-			Vector3 center(a + 0.9f * randomDouble(), 0.2f, b + 0.9f * randomDouble());
+			Vector3 center(a + 0.9 * randomDouble(), 0.2, b + 0.9 * randomDouble());
 			if ((center - Vector3(4, 0.2, 0)).magnitude() > 0.9) {
 				if (choose_mat < 0.8) {  // diffuse
-					list[i++] = new Sphere(center, 0.2,
-						new Lambertian(Vector3(randomDouble() * randomDouble(),
-							randomDouble() * randomDouble(),
-							randomDouble() * randomDouble())
+					list[i++] = new Sphere(
+						center, 0.2,
+						new Lambertian(
+							Vector3(randomDouble() * randomDouble(),
+								randomDouble() * randomDouble(),
+								randomDouble() * randomDouble())
 						)
 					);
 				}
 				else { // metal
-					list[i++] = new Sphere(center, 0.2,
-						new Metal(Vector3(0.5 * (1 + randomDouble()),
-							0.5 * (1 + randomDouble()),
-							0.5 * (1 + randomDouble())),
-							0.5 * randomDouble()));
+					list[i++] = new Sphere(
+						center, 0.2,
+						new Metal(
+							Vector3(0.5 * (1 + randomDouble()),
+								0.5 * (1 + randomDouble()),
+								0.5 * (1 + randomDouble())),
+							0.5 * randomDouble()
+						)
+					);
 				}
 			}
 		}
 	}
+
+	list[i++] = new Sphere(Vector3(-4, 1, 0), 1.0, new Lambertian(Vector3(0.4, 0.2, 0.1)));
+	list[i++] = new Sphere(Vector3(4, 1, 0), 1.0, new Metal(Vector3(0.7, 0.6, 0.5), 0.0));
 
 	return new HittableList(list, i);
 }
