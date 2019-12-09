@@ -5,9 +5,13 @@
 #include "Metal.h"
 #include "Lambertian.h"
 
+
 #include <iostream>
 #include <fstream>
 #include <float.h>
+#include <ctime>
+
+int nInter = 0;
 
 Vector3 color(const Ray& r, Hittable *world, int depth)
 {
@@ -16,8 +20,9 @@ Vector3 color(const Ray& r, Hittable *world, int depth)
 	{
 		Ray scattered;
 		Vector3 attenuation;
-		if (depth < 5/*maxDepth*/ && hrec.mat->scatter(r, hrec, attenuation, scattered)) 
+		if (depth < 1/*maxDepth*/ && hrec.mat->scatter(r, hrec, attenuation, scattered)) 
 		{
+			nInter++;
 			return attenuation * color(scattered, world, depth + 1);
 		} else
 		{
@@ -32,11 +37,11 @@ Vector3 color(const Ray& r, Hittable *world, int depth)
 }
 
 Hittable* randomScene() {
-	const int n = 10;
+	const int n = 10000;
 	Hittable** list = new Hittable * [n + 1];
 	int i = 0;
-	for (int a = -10; a < 10; a++) {
-		for (int b = -10; b < 10; b++) {
+	for (int a = -50; a < 50; a++) {
+		for (int b = -50; b < 50; b++) {
 			float choose_mat = randomDouble();
 			Vector3 center(a + 0.9 * randomDouble(), 0.2, b + 0.9 * randomDouble());
 			if ((center - Vector3(4, 0.2, 0)).magnitude() > 0.9) {
@@ -65,9 +70,6 @@ Hittable* randomScene() {
 		}
 	}
 
-	list[i++] = new Sphere(Vector3(-4, 1, 0), 1.0, new Lambertian(Vector3(0.4, 0.2, 0.1)));
-	list[i++] = new Sphere(Vector3(4, 1, 0), 1.0, new Metal(Vector3(0.7, 0.6, 0.5), 0.0));
-
 	return new HittableList(list, i);
 }
 
@@ -85,6 +87,8 @@ int main()
 
 	Camera cam;
 	file << "P3\n" << nX << " " << nY << "\n255\n";
+
+	auto begin = clock();
 
 	for (int y = nY - 1; y >= 0; y--) 
 	{
@@ -106,4 +110,10 @@ int main()
 			file << ir << " " << ig << " " << ib << "\n";
 		}
 	}
+	
+	auto end = clock();
+	auto elapsedTime = (end - begin) / CLOCKS_PER_SEC;
+
+	std::cout << elapsedTime << " secondes" << std::endl;
+	std::cout << nInter << " intersections" << std::endl;
 }
