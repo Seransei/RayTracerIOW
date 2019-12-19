@@ -64,27 +64,27 @@ bool BVHNode::boundingBox(float t0, float t1, AABB& b) const
 	return true;
 }
 
-BVHNode::BVHNode(Hittable** l, int n, float t0, float t1)
+BVHNode::BVHNode(Hittable** list, int n, float t0, float t1)
 {
 	int axis = int(3 * randomDouble());
 
 	if (axis == 0)
-		qsort(l, n, sizeof(Hittable*), box_x_compare);
+		qsort(list, n, sizeof(Hittable*), box_x_compare);
 	else if (axis == 1)
-		qsort(l, n, sizeof(Hittable*), box_y_compare);
+		qsort(list, n, sizeof(Hittable*), box_y_compare);
 	else
-		qsort(l, n, sizeof(Hittable*), box_z_compare);
+		qsort(list, n, sizeof(Hittable*), box_z_compare);
 
 	if (n == 1) {
-		left = right = l[0];
+		left = right = list[0];
 	}
 	else if (n == 2) {
-		left = l[0];
-		right = l[1];
+		left = list[0];
+		right = list[1];
 	}
 	else {
-		left = new BVHNode(l, n / 2, t0, t1);
-		right = new BVHNode(l + n / 2, n - n / 2, t0, t1);
+		left = new BVHNode(list, n / 2, t0, t1);
+		right = new BVHNode(list + n / 2, n - n / 2, t0, t1);
 	}
 
 	AABB boxLeft, boxRight;
@@ -114,6 +114,11 @@ bool BVHNode::hit(const Ray& r, float t_min, float t_max, HitRecord& hrec) const
 			return true;
 		}
 		else if (hitLeft)
+		{
+			hrec = leftRec;
+			return true;
+		}
+		else if (hitRight) 
 		{
 			hrec = rightRec;
 			return true;

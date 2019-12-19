@@ -12,16 +12,16 @@
 #include <ctime>
 
 int nInter = 0;
-const int nSph = 10000;
+const int nSph = 1000;
 
-Vector3 color(const Ray& r, Hittable *world, int depth)
+Vector3 color(const Ray& r, Hittable* world, int depth)
 {
 	HitRecord hrec;
 	if (world->hit(r, 0.001f, FLT_MAX, hrec))
 	{
 		Ray scattered;
 		Vector3 attenuation;
-		if (depth < 60/*maxDepth*/ && hrec.mat->scatter(r, hrec, attenuation, scattered)) 
+		if (depth < 1/*maxDepth*/ && hrec.mat->scatter(r, hrec, attenuation, scattered)) 
 		{
 			nInter++;
 			return attenuation * color(scattered, world, depth + 1);
@@ -40,7 +40,7 @@ Vector3 color(const Ray& r, Hittable *world, int depth)
 Hittable* randomScene() {
 	Hittable** list = new Hittable * [nSph + 1];
 	int i = 0;
-	for (int a = -50; a < 50; a++) {
+	for (int a = -1; a < 0; a++) {
 		for (int b = -50; b < 50; b++) {
 			float choose_mat = randomDouble();
 			Vector3 center(a + 0.9 * randomDouble(), 0.2, b + 0.9 * randomDouble());
@@ -70,7 +70,7 @@ Hittable* randomScene() {
 		}
 	}
 
-	// return new HittableList(list, i);
+	//return new HittableList(list, i);
 	return new BVHNode(list, i, 0.0f, 1.0f);
 }
 
@@ -84,12 +84,16 @@ int main()
 	std::ofstream file;
 	file.open("outputs/output.ppm");
 
+	auto begin = clock();
+
 	Hittable* world = randomScene();
 
 	Camera cam;
 	file << "P3\n" << nX << " " << nY << "\n255\n";
 
-	auto begin = clock();
+	auto endBVH = clock();
+	auto elapsedTime = (endBVH - begin) / CLOCKS_PER_SEC;
+	std::cout << "BVH : " << elapsedTime << " secondes" << std::endl;
 
 	for (int y = nY - 1; y >= 0; y--) 
 	{
@@ -113,8 +117,8 @@ int main()
 	}
 	
 	auto end = clock();
-	auto elapsedTime = (end - begin) / CLOCKS_PER_SEC;
+	elapsedTime = (end - begin) / CLOCKS_PER_SEC;
 
-	std::cout << elapsedTime << " secondes" << std::endl;
+	std::cout << "Total : " << elapsedTime << " secondes" << std::endl;
 	std::cout << nInter << " intersections" << std::endl;
 }
