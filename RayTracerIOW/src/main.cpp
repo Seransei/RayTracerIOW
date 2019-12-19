@@ -21,7 +21,7 @@ Vector3 color(const Ray& r, Hittable *world, int depth)
 	{
 		Ray scattered;
 		Vector3 attenuation;
-		if (depth < 10/*maxDepth*/ && hrec.mat->scatter(r, hrec, attenuation, scattered)) 
+		if (depth < 60/*maxDepth*/ && hrec.mat->scatter(r, hrec, attenuation, scattered)) 
 		{
 			nInter++;
 			return attenuation * color(scattered, world, depth + 1);
