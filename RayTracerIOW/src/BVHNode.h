@@ -52,7 +52,7 @@ public:
 	AABB box;
 
 	BVHNode(){}
-	BVHNode(Hittable** l, int n, float time0, float time1);
+	BVHNode(Hittable** l, int n, float t0, float t1);
 
 	virtual bool hit(const Ray& r, float t_min, float t_max, HitRecord& hrec) const;
 	virtual bool boundingBox(float t0, float t1, AABB& box) const;
@@ -64,7 +64,7 @@ bool BVHNode::boundingBox(float t0, float t1, AABB& b) const
 	return true;
 }
 
-BVHNode::BVHNode(Hittable** l, int n, float time0, float time1)
+BVHNode::BVHNode(Hittable** l, int n, float t0, float t1)
 {
 	int axis = int(3 * randomDouble());
 
@@ -83,14 +83,14 @@ BVHNode::BVHNode(Hittable** l, int n, float time0, float time1)
 		right = l[1];
 	}
 	else {
-		left = new BVHNode(l, n / 2, time0, time1);
-		right = new BVHNode(l + n / 2, n - n / 2, time0, time1);
+		left = new BVHNode(l, n / 2, t0, t1);
+		right = new BVHNode(l + n / 2, n - n / 2, t0, t1);
 	}
 
 	AABB boxLeft, boxRight;
 
-	if (!left->boundingBox(time0, time1, boxLeft) ||
-		!right->boundingBox(time0, time1, boxRight)) {
+	if (!left->boundingBox(t0, t1, boxLeft) ||
+		!right->boundingBox(t0, t1, boxRight)) {
 
 		std::cerr << "no bounding box in BVHNode constructor\n";
 	}

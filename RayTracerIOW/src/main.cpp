@@ -4,7 +4,7 @@
 #include "Random.h"
 #include "Metal.h"
 #include "Lambertian.h"
-
+#include "BVHNode.h"
 
 #include <iostream>
 #include <fstream>
@@ -12,6 +12,7 @@
 #include <ctime>
 
 int nInter = 0;
+const int nSph = 10000;
 
 Vector3 color(const Ray& r, Hittable *world, int depth)
 {
@@ -20,7 +21,7 @@ Vector3 color(const Ray& r, Hittable *world, int depth)
 	{
 		Ray scattered;
 		Vector3 attenuation;
-		if (depth < 1/*maxDepth*/ && hrec.mat->scatter(r, hrec, attenuation, scattered)) 
+		if (depth < 10/*maxDepth*/ && hrec.mat->scatter(r, hrec, attenuation, scattered)) 
 		{
 			nInter++;
 			return attenuation * color(scattered, world, depth + 1);
@@ -37,8 +38,7 @@ Vector3 color(const Ray& r, Hittable *world, int depth)
 }
 
 Hittable* randomScene() {
-	const int n = 10000;
-	Hittable** list = new Hittable * [n + 1];
+	Hittable** list = new Hittable * [nSph + 1];
 	int i = 0;
 	for (int a = -50; a < 50; a++) {
 		for (int b = -50; b < 50; b++) {
@@ -70,7 +70,8 @@ Hittable* randomScene() {
 		}
 	}
 
-	return new HittableList(list, i);
+	// return new HittableList(list, i);
+	return new BVHNode(list, i, 0.0f, 1.0f);
 }
 
 int main() 

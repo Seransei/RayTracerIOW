@@ -5,10 +5,12 @@ class Material;
 
 AABB surroundingBox(AABB box0, AABB box1)
 {
-	Vector3 small(ffmin(box0.min.x(), box1.min.x()),
+	Vector3 small(
+		ffmin(box0.min.x(), box1.min.x()),
 		ffmin(box0.min.y(), box1.min.y()),
 		ffmin(box0.min.z(), box1.min.z()));
-	Vector3 big(ffmax(box0.max.x(), box1.max.x()),
+	Vector3 big(
+		ffmax(box0.max.x(), box1.max.x()),
 		ffmax(box0.max.y(), box1.max.y()),
 		ffmax(box0.max.z(), box1.max.z()));
 	return AABB(small, big);
